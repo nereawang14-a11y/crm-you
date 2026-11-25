@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { setRol, useRol } from "@/lib/rol";
 import { useStore } from "@/lib/store";
 import { calcularPendientes } from "@/lib/reglas";
 import { fmtFecha, hoy, aIso, nombreDia } from "@/lib/fechas";
@@ -13,13 +15,21 @@ const MENU = [
   { href: "/mesas", label: "Mesas" },
   { href: "/presupuestos", label: "Presupuestos" },
   { href: "/carta", label: "Carta" },
+  { href: "/formacion", label: "Formación" },
 ];
 
 export default function CrmLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
+  const router = useRouter();
+  const rol = useRol();
+  useEffect(() => {
+    if (rol === null) router.replace("/acceso");
+    else if (rol === "empleado") router.replace("/formacion");
+  }, [rol, router]);
   const { datos, restablecer } = useStore();
   const nPend = calcularPendientes(datos).filter((p) => !p.ocultoPorCortesia).length;
   const H = hoy();
+  if (rol !== "direccion") return <div className="flex min-h-screen items-center justify-center text-stone-500">Cargando…</div>;
 
   return (
     <div className="flex min-h-screen">
@@ -46,6 +56,7 @@ export default function CrmLayout({ children }: { children: React.ReactNode }) {
         </nav>
         <div className="border-t border-stone-200 p-4 text-xs text-stone-500">
           <div className="mb-2 capitalize">{nombreDia(H)}, {fmtFecha(aIso(H))}</div>
+          <button onClick={() => { setRol(null); router.replace("/acceso"); }} className="mb-2 w-full rounded-md px-3 py-1.5 text-stone-600 hover:bg-stone-50">Cerrar sesión (Dirección)</button>
           <button
             onClick={() => {
               if (confirm("¿Restablecer todos los datos de ejemplo?")) restablecer();
