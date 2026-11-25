@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import { getClienteActual, setClienteActual } from "@/lib/sesionCliente";
@@ -121,6 +122,7 @@ function Visita({ it, c }: { it: Item; c: Cliente }) {
             })}
           </ul>
           {it.checkinId && <p className="mt-1 text-xs text-stone-400">Toca un plato para marcar “esto lo pedí yo”.</p>}
+          <Link href={`/mi-cuenta/ticket/${it.tipo}/${it.id}`} className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-emerald-700">🧾 Ver ticket digital</Link>
           {fb ? (
             fb.comentario && <p className="mt-2 text-sm italic text-stone-600">“{fb.comentario}”</p>
           ) : diasEntre(it.fecha, hoy()) > 14 ? (
@@ -146,7 +148,7 @@ function Visita({ it, c }: { it: Item; c: Cliente }) {
 
 function MisDatos({ c, salir }: { c: Cliente; salir: () => void }) {
   const { actualizarCliente, borrarCuenta } = useStore();
-  const [f, setF] = useState({ platos: c.platosFavoritos.join(", "), wa: c.consentimientoWhatsapp.acepta, consAl: c.consentimientoAlergias, alergias: c.alergias.join(", ") });
+  const [f, setF] = useState({ ticket: c.ticketDigital !== false, platos: c.platosFavoritos.join(", "), wa: c.consentimientoWhatsapp.acepta, consAl: c.consentimientoAlergias, alergias: c.alergias.join(", ") });
   const [ok, setOk] = useState(false);
   return (
     <Card>
@@ -155,6 +157,7 @@ function MisDatos({ c, salir }: { c: Cliente; salir: () => void }) {
         onSubmit={(e) => {
           e.preventDefault();
           actualizarCliente(c.id, {
+            ticketDigital: f.ticket,
             platosFavoritos: f.platos.split(",").map((x) => x.trim()).filter(Boolean),
             consentimientoWhatsapp: { acepta: f.wa, fecha: f.wa ? c.consentimientoWhatsapp.fecha ?? new Date().toISOString().slice(0, 16) : null },
             consentimientoAlergias: f.consAl,
@@ -164,6 +167,7 @@ function MisDatos({ c, salir }: { c: Cliente; salir: () => void }) {
         }}
       >
         <div><label className="text-xs text-stone-500">Mis platos favoritos</label><input className={`${inputCls} text-base`} value={f.platos} onChange={(e) => { setF({ ...f, platos: e.target.value }); setOk(false); }} /></div>
+        <label className="flex items-start gap-2 rounded-md bg-emerald-50 p-2 text-sm"><input type="checkbox" className="mt-1" checked={f.ticket} onChange={(e) => { setF({ ...f, ticket: e.target.checked }); setOk(false); }} /> Quiero el ticket en el móvil, sin papel 🌱</label>
         <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1" checked={f.consAl} onChange={(e) => { setF({ ...f, consAl: e.target.checked }); setOk(false); }} /> Guardar mis alergias para avisar a cocina</label>
         {f.consAl && <input className={`${inputCls} text-base`} placeholder="Ej.: marisco" value={f.alergias} onChange={(e) => { setF({ ...f, alergias: e.target.value }); setOk(false); }} />}
         <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1" checked={f.wa} onChange={(e) => { setF({ ...f, wa: e.target.checked }); setOk(false); }} /> Recibir mensajes de YOU por WhatsApp</label>

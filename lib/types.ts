@@ -20,6 +20,7 @@ export type Cliente = {
   empresa: string | null;
   notas: string;
   pedidoHabitual?: Plato[]; // "pedido de siempre" para llevar
+  ticketDigital?: boolean; // recibe el ticket en el móvil en vez de en papel
 };
 
 export type SesionMesa = {

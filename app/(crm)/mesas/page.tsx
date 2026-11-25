@@ -10,6 +10,7 @@ import { fmtEuros } from "@/lib/fechas";
 import type { Plato, SesionMesa } from "@/lib/types";
 import { Badge, Boton, Card, Titulo, inputCls } from "@/components/ui";
 import { MESAS, nombreMesa } from "@/lib/mesas";
+import { destinatariosDigitales } from "@/lib/tickets";
 
 
 
@@ -52,6 +53,7 @@ function Mesa({ n, sesion, onQr }: { n: number; sesion?: SesionMesa; onQr: () =>
   const [tel, setTel] = useState("");
   const [err, setErr] = useState("");
   const [cerrando, setCerrando] = useState(false);
+  const [aviso, setAviso] = useState<string | null>(null);
   const checkins = sesion ? datos.checkins.filter((k) => k.sesionId === sesion.id) : [];
   const cli = new Map(datos.clientes.map((c) => [c.id, c]));
 
@@ -105,12 +107,30 @@ function Mesa({ n, sesion, onQr }: { n: number; sesion?: SesionMesa; onQr: () =>
           <Boton onClick={() => setCerrando(true)}>Cerrar mesa (TPV)</Boton>
         </div>
       )}
-      {sesion && cerrando && <CerrarMesa sesion={sesion} minComensales={checkins.length} onFin={() => setCerrando(false)} cerrar={cerrarMesa} />}
+      {sesion && !cerrando && checkins.length > 0 && (() => {
+        const dig = destinatariosDigitales(datos, sesion.id);
+        return dig.length > 0 ? <p className="mt-2 text-xs text-emerald-700">🌱 Ticket digital para: {dig.map((c) => c.nombre.split(" ")[0]).join(", ")}</p> : <p className="mt-2 text-xs text-stone-500">Ticket en papel (nadie de la mesa tiene ticket digital)</p>;
+      })()}
+      {sesion && cerrando && (
+        <CerrarMesa
+          sesion={sesion}
+          minComensales={checkins.length}
+          onFin={(cerrada) => {
+            setCerrando(false);
+            if (cerrada) {
+              const dig = destinatariosDigitales(datos, sesion.id);
+              setAviso(dig.length ? `Ticket ${sesion.numeroTicket} enviado al móvil de ${dig.map((c) => c.nombre.split(" ")[0]).join(", ")}. No hace falta imprimirlo 🌱` : `Ticket ${sesion.numeroTicket}: imprimir en papel.`);
+            }
+          }}
+          cerrar={cerrarMesa}
+        />
+      )}
+      {aviso && <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{aviso}</p>}
     </Card>
   );
 }
 
-function CerrarMesa({ sesion, minComensales, onFin, cerrar }: { sesion: SesionMesa; minComensales: number; onFin: () => void; cerrar: (id: string, p: Plato[], c: number) => void }) {
+function CerrarMesa({ sesion, minComensales, onFin, cerrar }: { sesion: SesionMesa; minComensales: number; onFin: (cerrada: boolean) => void; cerrar: (id: string, p: Plato[], c: number) => void }) {
   const [lineas, setLineas] = useState<Plato[]>([]);
   const [sel, setSel] = useState("Menú del día A");
   const [com, setCom] = useState(Math.max(1, minComensales));
@@ -130,8 +150,8 @@ function CerrarMesa({ sesion, minComensales, onFin, cerrar }: { sesion: SesionMe
         <span className="font-semibold">{fmtEuros(total)}</span>
       </div>
       <div className="mt-3 flex gap-2">
-        <Boton disabled={!lineas.length} onClick={() => { cerrar(sesion.id, lineas, Math.max(com, minComensales, 1)); onFin(); }}>Cobrar y cerrar</Boton>
-        <Boton variante="secundario" onClick={onFin}>Cancelar</Boton>
+        <Boton disabled={!lineas.length} onClick={() => { cerrar(sesion.id, lineas, Math.max(com, minComensales, 1)); onFin(true); }}>Cobrar y cerrar</Boton>
+        <Boton variante="secundario" onClick={() => onFin(false)}>Cancelar</Boton>
       </div>
     </div>
   );

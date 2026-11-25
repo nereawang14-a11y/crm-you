@@ -129,6 +129,7 @@ function Preferencias({ c }: { c: Cliente }) {
         {fila("Canal preferido", c.canalPreferido)}
         {fila("Cómo nos conoció", c.comoNosConocio)}
         {fila("WhatsApp comercial", c.consentimientoWhatsapp.acepta ? "Sí, aceptado" : "No")}
+        {fila("Ticket", c.tieneCuenta && c.ticketDigital ? "🌱 Digital, en su móvil" : "En papel")}
         {fila("Pedido de siempre", c.pedidoHabitual?.map((p) => `${p.cantidad}× ${p.nombre}`).join(", "))}
         {fila("Notas", c.notas)}
       </dl>
@@ -141,7 +142,7 @@ function EditarCliente({ c }: { c: Cliente }) {
   const [f, setF] = useState({
     nombre: c.nombre, telefono: c.telefono, platos: c.platosFavoritos.join(", "), mesa: c.mesaPreferida ?? "", dia: c.diaHoraHabitual ?? "", com: c.comensalesHabitual ?? "",
     cumple: c.cumpleanos ?? "", empresa: c.empresa ?? "", notas: c.notas, wa: c.consentimientoWhatsapp.acepta, consAl: c.consentimientoAlergias, alergias: c.alergias.join(", "),
-    canal: c.canalPreferido ?? "", como: c.comoNosConocio ?? "",
+    canal: c.canalPreferido ?? "", como: c.comoNosConocio ?? "", ticket: c.ticketDigital !== false,
   });
   const campo = (label: string, k: keyof typeof f, ph = "") => (
     <div><label className="text-xs text-stone-500">{label}</label><input className={inputCls} placeholder={ph} value={String(f[k])} onChange={(e) => setF({ ...f, [k]: e.target.value })} /></div>
@@ -159,6 +160,7 @@ function EditarCliente({ c }: { c: Cliente }) {
             mesaPreferida: f.mesa === "" ? null : Number(f.mesa), diaHoraHabitual: f.dia || null, comensalesHabitual: f.com === "" ? null : Number(f.com),
             cumpleanos: /^\d{2}-\d{2}$/.test(f.cumple) ? f.cumple : null, empresa: f.empresa || null, notas: f.notas,
             consentimientoWhatsapp: { acepta: f.wa, fecha: f.wa ? c.consentimientoWhatsapp.fecha ?? new Date().toISOString().slice(0, 16) : null },
+            ticketDigital: f.ticket,
             consentimientoAlergias: f.consAl,
             alergias: f.consAl ? f.alergias.split(",").map((x) => x.trim()).filter(Boolean) : [],
             canalPreferido: (f.canal || null) as Cliente["canalPreferido"], comoNosConocio: (f.como || null) as Cliente["comoNosConocio"],
@@ -178,6 +180,7 @@ function EditarCliente({ c }: { c: Cliente }) {
           <div><label className="text-xs text-stone-500">Cómo nos conoció</label>
             <select className={inputCls} value={f.como} onChange={(e) => setF({ ...f, como: e.target.value })}><option value="">—</option>{["google", "boca a boca", "paso por la calle", "redes", "otro"].map((o) => <option key={o}>{o}</option>)}</select></div>
         </div>
+        <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={f.ticket} onChange={(e) => setF({ ...f, ticket: e.target.checked })} /> Ticket digital en el móvil (sin papel)</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={f.wa} onChange={(e) => setF({ ...f, wa: e.target.checked })} /> Acepta mensajes de WhatsApp de YOU</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={f.consAl} onChange={(e) => setF({ ...f, consAl: e.target.checked })} /> Consiente guardar sus alergias (dato de salud)</label>
         {f.consAl && campo("Alergias (separadas por comas)", "alergias", "Marisco, frutos secos")}

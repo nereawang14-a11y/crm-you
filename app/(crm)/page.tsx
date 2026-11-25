@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { calcularKpis, calcularPendientes } from "@/lib/reglas";
+import { ticketsSinPapel } from "@/lib/tickets";
 import { aDia, fmtEuros, fmtFechaHora, hoy } from "@/lib/fechas";
 import { Badge, Card, PendienteItem, Titulo } from "@/components/ui";
 
@@ -32,6 +33,7 @@ function Delta({ ahora, antes, inverso = false, fmt = (n: number) => String(n) }
 export default function Panel() {
   const { datos } = useStore();
   const k = calcularKpis(datos);
+  const papel = ticketsSinPapel(datos);
   const pend = calcularPendientes(datos).filter((p) => !p.ocultoPorCortesia);
   const cli = new Map(datos.clientes.map((c) => [c.id, c]));
   const hoyDia = aDia(hoy());
@@ -61,13 +63,14 @@ export default function Panel() {
           ayuda="Media de estrellas del feedback de los últimos 30 días."
         />
       </div>
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
         <Kpi
           titulo="Ingresos (últimos 30 días)"
           valor={fmtEuros(k.ingresos.total)}
           comparacion={<Delta ahora={k.ingresos.total} antes={k.ingresosAntes} fmt={fmtEuros} />}
           ayuda={`Sala ${fmtEuros(k.ingresos.sala)} · Para llevar ${fmtEuros(k.ingresos.llevar)} · Celebraciones ${fmtEuros(k.ingresos.celebraciones)}`}
         />
+        <Kpi titulo="Tickets sin papel (30 días)" valor={`🌱 ${papel.total}`} ayuda={`Tickets enviados al móvil en vez de imprimirlos: unos ${papel.metrosPapel.toLocaleString("es-ES")} m de papel térmico ahorrados.`} />
         <Kpi titulo="Habituales con cuenta" valor={k.pctHabitualesConCuenta === null ? "—" : `${k.pctHabitualesConCuenta} %`} ayuda="Mide si la captación en persona funciona: habituales con cuenta ÷ habituales." />
       </div>
 

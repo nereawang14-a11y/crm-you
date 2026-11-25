@@ -18,7 +18,7 @@ export default function MesaQR() {
   const [tel, setTel] = useState("");
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [error, setError] = useState("");
-  const [f, setF] = useState({ nombre: "", wa: false, consAl: false, alergias: "", cumple: "" });
+  const [f, setF] = useState({ nombre: "", wa: false, consAl: false, alergias: "", cumple: "", ticket: true });
 
   if (!MESAS.includes(mesa)) return <Card>Mesa no válida.</Card>;
 
@@ -80,6 +80,7 @@ export default function MesaQR() {
                 alergias: f.consAl ? f.alergias.split(",").map((x) => x.trim()).filter(Boolean) : [],
                 cumpleanos: /^\d{2}-\d{2}$/.test(f.cumple) ? f.cumple : null,
                 canalPreferido: f.wa ? "whatsapp" : null,
+                ticketDigital: f.ticket,
               };
               if (cliente) {
                 // cliente que ya existía en el CRM (lo registró el personal) y activa su cuenta
@@ -101,6 +102,7 @@ export default function MesaQR() {
             </div>
             <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1" checked={f.consAl} onChange={(e) => setF({ ...f, consAl: e.target.checked })} /> Quiero que YOU guarde mis alergias para avisar a cocina en cada visita.</label>
             {f.consAl && <input className={`${inputCls} text-base`} placeholder="Ej.: marisco, frutos secos" value={f.alergias} onChange={(e) => setF({ ...f, alergias: e.target.value })} />}
+            <label className="flex items-start gap-2 rounded-md bg-emerald-50 p-2 text-sm"><input type="checkbox" className="mt-1" checked={f.ticket} onChange={(e) => setF({ ...f, ticket: e.target.checked })} /> Quiero el ticket en el móvil, sin papel 🌱</label>
             <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1" checked={f.wa} onChange={(e) => setF({ ...f, wa: e.target.checked })} /> Acepto recibir mensajes de YOU por WhatsApp (felicitaciones, preguntarme qué tal fue). Puedo darme de baja cuando quiera.</label>
             {error && <p className="text-sm text-red-700">{error}</p>}
             <button type="submit" className="w-full rounded-lg bg-red-700 py-3 font-medium text-white">Crear cuenta y unirme a {nombreMesa(mesa).toLowerCase()}</button>
@@ -114,6 +116,7 @@ export default function MesaQR() {
           <div className="text-4xl">🥢</div>
           <h1 className="mt-2 text-xl font-semibold">{esNuevo ? "¡Bienvenido a YOU" : "¡Bienvenido de nuevo"}, {cliente.nombre.split(" ")[0]}!</h1>
           <p className="mt-1 text-sm text-stone-600">Ya estás en {nombreMesa(mesa).toLowerCase()}. Que aproveche.</p>
+          {cliente.ticketDigital !== false && <p className="mt-3 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">Al pagar, tu ticket llegará a “Mi cuenta”. Sin papel 🌱</p>}
           {cliente.alergias.length > 0 && <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-800">Avisaremos a cocina de tu alergia: {cliente.alergias.join(", ")}.</p>}
           <Link href="/mi-cuenta" className="mt-4 inline-block"><Boton variante="secundario">Ver mi cuenta</Boton></Link>
         </Card>

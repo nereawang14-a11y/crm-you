@@ -2,7 +2,7 @@ import type { Cliente, Datos, Plato, SesionMesa, CheckIn, PedidoLlevar, Feedback
 import { aDia, diasHastaUltimo, hoy, rel } from "./fechas";
 import { CARTA, precioDe } from "./carta";
 
-export const VERSION_DATOS = 6;
+export const VERSION_DATOS = 7;
 
 export { CARTA };
 
@@ -38,6 +38,7 @@ function cliente(b: Base, fechaAlta: string): Cliente {
     diaHoraHabitual: null,
     comensalesHabitual: null,
     canalPreferido: "whatsapp",
+    ticketDigital: b.tieneCuenta !== false,
     comoNosConocio: null,
     empresa: null,
     notas: "",
@@ -65,7 +66,7 @@ export function generarDatos(): Datos {
     cliente({ id: "c-javier", nombre: "Javier Molina", telefono: "622 345 601", platosFavoritos: ["Menú del día B", "Pato laqueado pekinés (3 servicios)"], diaHoraHabitual: "Miércoles 14:30, cada dos semanas", comensalesHabitual: 3, empresa: "Molina Asesores", comoNosConocio: "boca a boca", notas: "Uno de los tres empresarios de los miércoles. Algún fin de semana viene con su familia (5 personas)." }, alta),
     cliente({ id: "c-andres", nombre: "Andrés Pérez", telefono: "622 345 602", tieneCuenta: false, cuentaCreadaPor: null, consentimientoWhatsapp: { acepta: false, fecha: null }, canalPreferido: null, platosFavoritos: ["Menú del día B"], diaHoraHabitual: "Miércoles 14:30, cada dos semanas", comensalesHabitual: 3, empresa: "Pérez Instalaciones", comoNosConocio: "boca a boca", notas: "Viene con Javier y Raúl. Aún no tiene cuenta." }, alta),
     cliente({ id: "c-raul", nombre: "Raúl Sanz", telefono: "622 345 603", platosFavoritos: ["Menú del día B"], diaHoraHabitual: "Miércoles 14:30, cada dos semanas", comensalesHabitual: 3, empresa: "Sanz Logística", comoNosConocio: "boca a boca", notas: "Cuando celebran algo, piden pato laqueado para compartir." }, alta),
-    cliente({ id: "c-antonio", nombre: "Antonio García", telefono: "633 456 701", cuentaCreadaPor: "personal", consentimientoWhatsapp: { acepta: false, fecha: null }, canalPreferido: "llamada", consentimientoAlergias: true, alergias: ["Marisco (dato de ejemplo)"], platosFavoritos: ["Pollo al limón", "Arroz frito tres delicias"], mesaPreferida: 8, diaHoraHabitual: "Martes 21:00", comensalesHabitual: 3, comoNosConocio: "boca a boca", notas: "El abuelo de la familia de los martes. No usa el móvil: la cuenta se la creó el personal." }, alta),
+    cliente({ id: "c-antonio", nombre: "Antonio García", telefono: "633 456 701", cuentaCreadaPor: "personal", ticketDigital: false, consentimientoWhatsapp: { acepta: false, fecha: null }, canalPreferido: "llamada", consentimientoAlergias: true, alergias: ["Marisco (dato de ejemplo)"], platosFavoritos: ["Pollo al limón", "Arroz frito tres delicias"], mesaPreferida: 8, diaHoraHabitual: "Martes 21:00", comensalesHabitual: 3, comoNosConocio: "boca a boca", notas: "El abuelo de la familia de los martes. No usa el móvil: la cuenta se la creó el personal." }, alta),
     cliente({ id: "c-miguel", nombre: "Miguel García", telefono: "633 456 702", platosFavoritos: ["Solomillo con bambú y setas chinas", "Saomai (4 piezas)"], mesaPreferida: 8, diaHoraHabitual: "Martes 21:00", comensalesHabitual: 3, comoNosConocio: "boca a boca" }, alta),
     cliente({ id: "c-pablo", nombre: "Pablo García", telefono: "633 456 703", cumpleanos: mmdd(5), platosFavoritos: ["Xiao long bao (4 piezas)", "Tallarines fritos con gambas"], mesaPreferida: 8, diaHoraHabitual: "Martes 21:00", comensalesHabitual: 3, comoNosConocio: "boca a boca" }, alta),
     cliente({ id: "c-sofia", nombre: "Sofía Martín", telefono: "644 567 801", platosFavoritos: ["Menú del día A"], mesaPreferida: 2, diaHoraHabitual: "Lunes a viernes 14:00", comensalesHabitual: 1, comoNosConocio: "google", notas: "Comía a diario en su hora de descanso del trabajo." }, alta),
