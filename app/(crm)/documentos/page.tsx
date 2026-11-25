@@ -6,6 +6,7 @@ import { useStore } from "@/lib/store";
 import { calcularPendientes } from "@/lib/reglas";
 import { ANTELACION, CAMPANAS, DOCUMENTOS, REGLAS_ENVIO, proximaFecha } from "@/lib/documentos";
 import { fmtFecha, hoy, rel } from "@/lib/fechas";
+import { descargarWord } from "@/lib/word";
 import { Badge, Card, PendienteItem, Titulo } from "@/components/ui";
 
 export default function Documentos() {
@@ -42,6 +43,7 @@ export default function Documentos() {
             <p className="mt-1 text-xs text-stone-500">Para: {d.paraQuien}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <a href={`/doc/${d.id}`} target="_blank" className="rounded-md bg-red-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-800">Ver y descargar PDF ↗</a>
+              <button onClick={() => descargarWord(d.id)} className="rounded-md border border-stone-300 px-3 py-1.5 text-sm text-stone-700 hover:bg-stone-50">Word (editable)</button>
               <button onClick={() => copiar(d.id)} className="rounded-md border border-stone-300 px-3 py-1.5 text-sm text-stone-700 hover:bg-stone-50">{copiado === d.id ? "¡Enlace copiado!" : "Copiar enlace para el cliente"}</button>
             </div>
           </Card>

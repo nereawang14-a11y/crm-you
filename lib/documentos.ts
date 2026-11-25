@@ -44,3 +44,21 @@ export const REGLAS_ENVIO = [
   "Los recordatorios personales (aniversario de una cena de empresa o cumpleaños) tienen prioridad sobre las campañas generales.",
   "Enviar entre semana de 11:00 a 12:30 o de 17:30 a 19:00, antes de las horas de comida y cena. Nunca de noche ni en fin de semana.",
 ];
+
+export const INFO = "Avenida Juan Carlos I, 13 · La Garena, Alcalá de Henares · 91 802 54 52 · Lunes a domingo, 12:00–16:30 y 19:30–23:30";
+
+export const MENUS_GRUPO = [
+  { nombre: "Menú You", precio: 35, platos: ["Ensalada (2)", "Rollitos vietnamitas (4)", "Arroz frito", "Solomillo de ternera con pimientos verdes", "Pollo frito almendrado"] },
+  { nombre: "Menú Cantonés", precio: 37.9, platos: ["Sopa agripicante", "Rollo de primavera", "Dim sum (ja kao y siu mai)", "Arroz frito al estilo cantonés", "Solomillo de ternera salteado con lechuga al estilo cantonés"] },
+  { nombre: "Menú Asia", precio: 39.9, platos: ["Sopa Tom Yam Kum", "Rollo de pollo con mango", "Tempura de verduras", "Arroz frito con algodón de cerdo", "Gambas al estilo tailandés", "Teppanyaki de pollo"] },
+  { nombre: "Menú Japonés", precio: 45.9, platos: ["Sopa de miso", "Ensalada japonesa", "Tempura mixta", "Mixto de sushi", "Arroz frito japonés", "Teppanyaki de langostinos", "Teppanyaki de ternera (yakiniku)"] },
+];
+
+
+export const TEXTOS = {
+  menusGrupoIntro: "Menús pensados para compartir. Perfectos para cumpleaños, comidas familiares y grupos. Para grupos grandes, llámanos y preparamos la mesa.",
+  navidadIntro: "Este año, celebrad la cena de empresa en YOU. Preparamos la sala a medida de vuestro grupo, juntando las mesas que haga falta, y os proponemos menús para compartir.",
+  navidadReserva: "en diciembre se llena. Llámanos al 91 802 54 52 o escríbenos por WhatsApp con la fecha y el número de personas y os guardamos la mesa.",
+  menuDelDia: "De lunes a viernes, a mediodía. Solo en sala. Primeros y segundos cambian cada día: pregunta al personal.",
+  pato: "Nuestra especialidad para celebraciones: pato laqueado pekinés en tres servicios (piel crujiente con crepes, salteado y sopa), desde 29,00 €.",
+};

@@ -2,17 +2,9 @@
 
 import { useParams } from "next/navigation";
 import { CARTA, CATEGORIAS } from "@/lib/carta";
-import { DOCUMENTOS } from "@/lib/documentos";
+import { DOCUMENTOS, INFO, MENUS_GRUPO, TEXTOS } from "@/lib/documentos";
+import { descargarWord } from "@/lib/word";
 import { fmtEuros } from "@/lib/fechas";
-
-const INFO = "Avenida Juan Carlos I, 13 · La Garena, Alcalá de Henares · 91 802 54 52 · Lunes a domingo, 12:00–16:30 y 19:30–23:30";
-
-const MENUS_GRUPO = [
-  { nombre: "Menú You", precio: 35, platos: ["Ensalada (2)", "Rollitos vietnamitas (4)", "Arroz frito", "Solomillo de ternera con pimientos verdes", "Pollo frito almendrado"] },
-  { nombre: "Menú Cantonés", precio: 37.9, platos: ["Sopa agripicante", "Rollo de primavera", "Dim sum (ja kao y siu mai)", "Arroz frito al estilo cantonés", "Solomillo de ternera salteado con lechuga al estilo cantonés"] },
-  { nombre: "Menú Asia", precio: 39.9, platos: ["Sopa Tom Yam Kum", "Rollo de pollo con mango", "Tempura de verduras", "Arroz frito con algodón de cerdo", "Gambas al estilo tailandés", "Teppanyaki de pollo"] },
-  { nombre: "Menú Japonés", precio: 45.9, platos: ["Sopa de miso", "Ensalada japonesa", "Tempura mixta", "Mixto de sushi", "Arroz frito japonés", "Teppanyaki de langostinos", "Teppanyaki de ternera (yakiniku)"] },
-];
 
 function Menus() {
   return (
@@ -43,7 +35,10 @@ export default function Doc() {
           <div className="text-5xl font-black tracking-tight text-red-700">YOU</div>
           <div className="text-sm text-stone-500">Cocina asiática y japonesa · Alcalá de Henares</div>
         </div>
-        <button onClick={() => window.print()} className="rounded-md bg-red-700 px-4 py-2 text-sm font-medium text-white print:hidden">Descargar PDF</button>
+        <div className="flex gap-2 print:hidden">
+          <button onClick={() => window.print()} className="rounded-md bg-red-700 px-4 py-2 text-sm font-medium text-white">Descargar PDF</button>
+          <button onClick={() => descargarWord(doc.id)} className="rounded-md border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-800">Descargar Word (editable)</button>
+        </div>
       </div>
       <h1 className="mb-4 border-b-2 border-red-700 pb-2 text-2xl font-semibold">{doc.titulo}</h1>
 
@@ -80,7 +75,7 @@ export default function Doc() {
 
       {id === "menus-grupo" && (
         <>
-          <p className="mb-4 text-stone-700">Menús pensados para compartir. Perfectos para cumpleaños, comidas familiares y grupos. Para grupos grandes, llámanos y preparamos la mesa.</p>
+          <p className="mb-4 text-stone-700">{TEXTOS.menusGrupoIntro}</p>
           <Menus />
           <p className="mt-4 text-sm text-stone-600">Nuestra especialidad para celebraciones: <strong>pato laqueado pekinés en tres servicios</strong> (piel crujiente con crepes, salteado y sopa), desde {fmtEuros(29)}.</p>
         </>
@@ -88,10 +83,10 @@ export default function Doc() {
 
       {id === "navidad-empresas" && (
         <>
-          <p className="mb-4 text-stone-700">Este año, celebrad la cena de empresa en YOU. Preparamos la sala a medida de vuestro grupo, juntando las mesas que haga falta, y os proponemos menús para compartir.</p>
+          <p className="mb-4 text-stone-700">{TEXTOS.navidadIntro}</p>
           <Menus />
           <div className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-900 print:bg-white">
-            <strong>Reserva con antelación:</strong> en diciembre se llena. Llámanos al 91 802 54 52 o escríbenos por WhatsApp con la fecha y el número de personas y os guardamos la mesa.
+            <strong>Reserva con antelación:</strong> {TEXTOS.navidadReserva}
           </div>
           <p className="mt-3 text-xs text-stone-400 print:hidden">Texto propuesto para la demo: condiciones a validar por el restaurante.</p>
         </>
