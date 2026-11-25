@@ -90,7 +90,7 @@ export default function Panel() {
             {reservasHoy.map((r) => {
               const c = cli.get(r.clienteId)!;
               return (
-                <div key={r.id} className="flex items-center justify-between gap-2 px-4 py-3">
+                <div key={r.id} className="px-4 py-3">
                   <div>
                     <Link href={`/clientes/${c.id}`} className="font-medium hover:underline">{c.nombre}</Link>
                     <div className="text-xs text-stone-500">
@@ -98,7 +98,7 @@ export default function Panel() {
                       {c.mesaPreferida ? ` · mesa ${c.mesaPreferida}` : ""}
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-1">
+                  <div className="mt-1 flex flex-wrap gap-1">
                     {c.alergias.length > 0 && <Badge className="bg-red-100 text-red-700">Alergia: {c.alergias.join(", ")}</Badge>}
                     {!c.tieneCuenta && <Badge className="bg-amber-100 text-amber-800">Sin cuenta</Badge>}
                     {r.comensales >= 8 && <Badge className="bg-violet-100 text-violet-800">Grupo grande: juntar mesas</Badge>}
