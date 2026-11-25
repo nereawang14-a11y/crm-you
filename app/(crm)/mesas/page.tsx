@@ -8,8 +8,9 @@ import { CARTA, plato } from "@/lib/seed";
 import { fmtEuros } from "@/lib/fechas";
 import type { Plato, SesionMesa } from "@/lib/types";
 import { Badge, Boton, Card, Titulo, inputCls } from "@/components/ui";
+import { MESAS, nombreMesa } from "@/lib/mesas";
 
-const MESAS = Array.from({ length: 12 }, (_, i) => i + 1);
+
 
 export default function Mesas() {
   const { datos } = useStore();
@@ -20,7 +21,7 @@ export default function Mesas() {
 
   return (
     <div className="max-w-6xl">
-      <Titulo sub="Cada mesa tiene su QR. Cuando un cliente lo escanea y hace check-in, aparece aquí. Al cerrar la mesa (simula el TPV), la visita queda registrada para cada persona.">Mesas de hoy</Titulo>
+      <Titulo sub="23 mesas en sala y 4 en terraza. Cada mesa tiene su QR. Cuando un cliente lo escanea y hace check-in, aparece aquí. Al cerrar la mesa (simula el TPV), la visita queda registrada para cada persona.">Mesas de hoy</Titulo>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {MESAS.map((n) => (
           <Mesa key={n} n={n} sesion={abiertas.get(n)} onQr={() => setQr(n)} />
@@ -31,7 +32,7 @@ export default function Mesas() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setQr(null)}>
           <div className="rounded-2xl bg-white p-8 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
             <div className="text-3xl font-black text-red-700">YOU</div>
-            <div className="mb-4 text-stone-600">Mesa {qr} · Escanea y únete a tu mesa</div>
+            <div className="mb-4 text-stone-600">{nombreMesa(qr)} · Escanea y únete a tu mesa</div>
             <QRCodeSVG value={`${origen}/mesa/${qr}`} size={220} />
             <div className="mt-3 text-xs text-stone-500">{origen}/mesa/{qr}</div>
             <div className="mt-4 flex justify-center gap-2">
@@ -56,7 +57,7 @@ function Mesa({ n, sesion, onQr }: { n: number; sesion?: SesionMesa; onQr: () =>
   return (
     <Card className={sesion ? "border-emerald-300" : ""}>
       <div className="flex items-center justify-between">
-        <div className="text-lg font-semibold">Mesa {n}</div>
+        <div className="text-lg font-semibold">{nombreMesa(n)}</div>
         <div className="flex items-center gap-2">
           {sesion ? <Badge className="bg-emerald-100 text-emerald-800">Abierta</Badge> : <Badge className="bg-stone-100 text-stone-500">Libre</Badge>}
           <button onClick={onQr} className="rounded-md border border-stone-300 px-2 py-1 text-xs text-stone-700 hover:bg-stone-50">QR</button>
