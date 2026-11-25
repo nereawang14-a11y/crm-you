@@ -9,6 +9,7 @@ import { ticketDe } from "@/lib/tickets";
 import { fmtEuros, fmtFechaHora } from "@/lib/fechas";
 import { nombreMesa } from "@/lib/mesas";
 import { Card } from "@/components/ui";
+import { Logo } from "@/components/logo";
 
 export default function TicketDigital() {
   const { tipo, id } = useParams<{ tipo: "sesion" | "pedido"; id: string }>();
@@ -20,14 +21,14 @@ export default function TicketDigital() {
   // Solo puede verlo quien estuvo en esa mesa o hizo ese pedido
   const permitido = tipo === "sesion" ? datos.checkins.some((k) => k.sesionId === id && k.clienteId === cid) : datos.pedidos.some((p) => p.id === id && p.clienteId === cid);
   const t = permitido ? ticketDe(datos, tipo, id) : null;
-  if (!t) return <Card>Ticket no disponible. <Link href="/mi-cuenta" className="text-red-700">Volver a mi cuenta</Link></Card>;
+  if (!t) return <Card>Ticket no disponible. <Link href="/mi-cuenta" className="text-oro-700">Volver a mi cuenta</Link></Card>;
 
   return (
     <div>
       <Link href="/mi-cuenta" className="text-sm text-stone-500 print:hidden">← Mis visitas</Link>
       <div className="mx-auto mt-3 max-w-sm rounded-xl border border-stone-200 bg-white p-5 font-mono text-sm shadow-sm print:border-0 print:shadow-none">
         <div className="text-center">
-          <div className="font-sans text-3xl font-black text-red-700">YOU</div>
+          <div className="font-sans"><Logo size="md" /></div>
           <div className="text-xs text-stone-600">Restaurante You · Av. Juan Carlos I, 13<br />28806 Alcalá de Henares · 91 802 54 52</div>
         </div>
         <div className="my-3 border-t border-dashed border-stone-300" />

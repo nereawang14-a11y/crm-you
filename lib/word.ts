@@ -9,7 +9,7 @@ export async function descargarWord(id: string) {
   const { Document, Packer, Paragraph, TextRun, AlignmentType, TabStopType } = await import("docx");
   const doc = DOCUMENTOS.find((d) => d.id === id);
   if (!doc) return;
-  const ROJO = "B91C1C";
+  const ROJO = "8A6A3E"; // dorado oscuro de marca
   const p = (text: string, opts: { bold?: boolean; color?: string; size?: number; italics?: boolean } = {}) =>
     new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text, ...opts })] });
   const h = (text: string) => new Paragraph({ spacing: { before: 240, after: 80 }, children: [new TextRun({ text: text.toUpperCase(), color: ROJO, bold: true })] });

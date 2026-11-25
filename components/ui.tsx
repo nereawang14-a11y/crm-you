@@ -71,7 +71,7 @@ export function PendienteItem({ p, cliente, compacto = false }: { p: Pendiente; 
             <span className="text-xs font-semibold text-stone-400">P{p.prioridad}</span>
             <span className="font-medium text-stone-900">{info.nombre}</span>
             {cliente && (
-              <Link href={`/clientes/${cliente.id}`} className="text-sm text-red-700 hover:underline">
+              <Link href={`/clientes/${cliente.id}`} className="text-sm text-oro-700 hover:underline">
                 {cliente.nombre}
               </Link>
             )}
@@ -86,7 +86,7 @@ export function PendienteItem({ p, cliente, compacto = false }: { p: Pendiente; 
         </div>
         {!p.ocultoPorCortesia && (
           <div className="flex shrink-0 gap-2">
-            <button onClick={() => completarPendiente(p)} className="rounded-md bg-red-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-800">
+            <button onClick={() => completarPendiente(p)} className="rounded-md bg-stone-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-stone-700">
               {p.mensaje ? "Enviar y marcar hecho" : "Hecho"}
             </button>
             {!compacto && (
@@ -104,7 +104,7 @@ export function PendienteItem({ p, cliente, compacto = false }: { p: Pendiente; 
 export function Boton({ children, onClick, variante = "primario", type = "button", disabled }: { children: React.ReactNode; onClick?: () => void; variante?: "primario" | "secundario"; type?: "button" | "submit"; disabled?: boolean }) {
   const cls =
     variante === "primario"
-      ? "bg-red-700 text-white hover:bg-red-800 disabled:bg-stone-300"
+      ? "bg-stone-900 text-white hover:bg-stone-700 disabled:bg-stone-300"
       : "border border-stone-300 bg-white text-stone-800 hover:bg-stone-50";
   return (
     <button type={type} disabled={disabled} onClick={onClick} className={`rounded-md px-3 py-2 text-sm font-medium ${cls}`}>
@@ -113,4 +113,4 @@ export function Boton({ children, onClick, variante = "primario", type = "button
   );
 }
 
-export const inputCls = "w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-red-600 focus:outline-none focus:ring-1 focus:ring-red-600";
+export const inputCls = "w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500";

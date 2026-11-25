@@ -57,7 +57,7 @@ export default function MesaQR() {
           >
             <input className={`${inputCls} text-base`} inputMode="tel" placeholder="Tu teléfono" value={tel} onChange={(e) => setTel(e.target.value)} />
             {error && <p className="text-sm text-red-700">{error}</p>}
-            <button type="submit" className="w-full rounded-lg bg-red-700 py-3 font-medium text-white">Estoy en {nombreMesa(mesa).toLowerCase()}</button>
+            <button type="submit" className="w-full rounded-lg bg-stone-900 py-3 font-medium text-white">Estoy en {nombreMesa(mesa).toLowerCase()}</button>
           </form>
           <p className="mt-3 text-xs text-stone-500">Si ya tienes cuenta, entras directamente. Si no, te la creamos en 30 segundos.</p>
         </Card>
@@ -105,7 +105,7 @@ export default function MesaQR() {
             <label className="flex items-start gap-2 rounded-md bg-emerald-50 p-2 text-sm"><input type="checkbox" className="mt-1" checked={f.ticket} onChange={(e) => setF({ ...f, ticket: e.target.checked })} /> Quiero el ticket en el móvil, sin papel 🌱</label>
             <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1" checked={f.wa} onChange={(e) => setF({ ...f, wa: e.target.checked })} /> Acepto recibir mensajes de YOU por WhatsApp (felicitaciones, preguntarme qué tal fue). Puedo darme de baja cuando quiera.</label>
             {error && <p className="text-sm text-red-700">{error}</p>}
-            <button type="submit" className="w-full rounded-lg bg-red-700 py-3 font-medium text-white">Crear cuenta y unirme a {nombreMesa(mesa).toLowerCase()}</button>
+            <button type="submit" className="w-full rounded-lg bg-stone-900 py-3 font-medium text-white">Crear cuenta y unirme a {nombreMesa(mesa).toLowerCase()}</button>
             <p className="text-xs text-stone-500">Responsable: YOU (restaurante familiar, Alcalá de Henares). Usamos tus datos para guardar tu historial y avisos de alergias y, si lo aceptas, para escribirte. Puedes editarlos o borrar tu cuenta desde “Mi cuenta”.</p>
           </form>
         </Card>

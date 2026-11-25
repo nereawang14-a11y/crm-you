@@ -20,7 +20,7 @@ export default function Ficha() {
   const c = datos.clientes.find((x) => x.id === id);
   const [editando, setEditando] = useState(false);
   const [verTodo, setVerTodo] = useState(false);
-  if (!c) return <Card>Cliente no encontrado. <Link href="/clientes" className="text-red-700">Volver</Link></Card>;
+  if (!c) return <Card>Cliente no encontrado. <Link href="/clientes" className="text-oro-700">Volver</Link></Card>;
   const s = statsCliente(datos, c);
   const pend = calcularPendientes(datos).filter((p) => p.clienteId === c.id);
 
@@ -49,7 +49,7 @@ export default function Ficha() {
 
   return (
     <div className="max-w-6xl">
-      <Link href="/clientes" className="text-sm text-stone-500 hover:text-red-700">← Clientes</Link>
+      <Link href="/clientes" className="text-sm text-stone-500 hover:text-oro-700">← Clientes</Link>
       <div className="mb-6 mt-2 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">{c.nombre}</h1>
@@ -107,7 +107,7 @@ export default function Ficha() {
                 </li>
               ))}
             </ol>
-            {ev.length > 12 && <button onClick={() => setVerTodo(!verTodo)} className="mt-4 text-sm text-red-700 hover:underline">{verTodo ? "Ver menos" : `Ver las ${ev.length} interacciones`}</button>}
+            {ev.length > 12 && <button onClick={() => setVerTodo(!verTodo)} className="mt-4 text-sm text-oro-700 hover:underline">{verTodo ? "Ver menos" : `Ver las ${ev.length} interacciones`}</button>}
           </Card>
         </div>
       </div>

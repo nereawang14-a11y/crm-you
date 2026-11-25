@@ -7,6 +7,7 @@ import { setRol, useRol } from "@/lib/rol";
 import { useStore } from "@/lib/store";
 import { calcularPendientes } from "@/lib/reglas";
 import { fmtFecha, hoy, aIso, nombreDia } from "@/lib/fechas";
+import { Logo } from "@/components/logo";
 
 const MENU = [
   { href: "/", label: "Panel" },
@@ -36,16 +37,16 @@ export default function CrmLayout({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen">
       <aside className="sticky top-0 flex h-screen w-56 shrink-0 flex-col border-r border-stone-200 bg-white">
         <div className="px-5 py-6">
-          <div className="text-3xl font-black tracking-tight text-red-700">YOU</div>
+          <Logo size="md" />
           <div className="text-xs text-stone-500">Restaurante asiático · Alcalá de Henares</div>
         </div>
         <nav className="flex-1 space-y-1 px-3">
           {MENU.map((m) => {
             const activo = m.href === "/" ? path === "/" : path.startsWith(m.href);
             return (
-              <Link key={m.href} href={m.href} className={`flex items-center justify-between rounded-md px-3 py-2 text-sm ${activo ? "bg-red-50 font-medium text-red-800" : "text-stone-700 hover:bg-stone-50"}`}>
+              <Link key={m.href} href={m.href} className={`flex items-center justify-between rounded-md px-3 py-2 text-sm ${activo ? "bg-oro-50 font-medium text-stone-900" : "text-stone-700 hover:bg-stone-50"}`}>
                 {m.label}
-                {m.href === "/pendientes" && nPend > 0 && <span className="rounded-full bg-red-700 px-2 text-xs text-white">{nPend}</span>}
+                {m.href === "/pendientes" && nPend > 0 && <span className="rounded-full bg-stone-900 px-2 text-xs text-white">{nPend}</span>}
               </Link>
             );
           })}

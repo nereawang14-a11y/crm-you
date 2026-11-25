@@ -89,7 +89,7 @@ export default function Clientes() {
             {filas.map(({ c, s }) => (
               <tr key={c.id} className="hover:bg-stone-50">
                 <td className="px-4 py-3">
-                  <Link href={`/clientes/${c.id}`} className="font-medium text-stone-900 hover:text-red-700">{c.nombre}</Link>
+                  <Link href={`/clientes/${c.id}`} className="font-medium text-stone-900 hover:text-oro-700">{c.nombre}</Link>
                   <div className="text-xs text-stone-500">{c.telefono}{c.empresa ? ` · ${c.empresa}` : ""}</div>
                 </td>
                 <td className="px-4 py-3"><SegmentoBadge s={s.segmento} riesgo={s.enRiesgo} menos={s.vieneMenos} /></td>

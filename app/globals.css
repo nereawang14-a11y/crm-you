@@ -5,3 +5,10 @@ body {
   color: #1c1917;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
+
+/* Colores de marca YOU: dorado de la web del restaurante */
+@theme {
+  --color-oro: #be9a66;
+  --color-oro-700: #8a6a3e;
+  --color-oro-50: #f6f0e6;
+}

@@ -57,7 +57,7 @@ export default function Panel() {
           comparacion={
             <>
               {k.valoracion !== null && <Delta ahora={k.valoracion} antes={k.valoracionAntes} fmt={(n) => n.toFixed(1).replace(".", ",")} />}
-              {k.negativosSinResponder > 0 && <div className="text-red-700">{k.negativosSinResponder} negativo(s) sin responder</div>}
+              {k.negativosSinResponder > 0 && <div className="text-oro-700">{k.negativosSinResponder} negativo(s) sin responder</div>}
             </>
           }
           ayuda="Media de estrellas del feedback de los últimos 30 días."
@@ -78,7 +78,7 @@ export default function Panel() {
         <div className="lg:col-span-2">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-lg font-semibold">Lo más urgente</h2>
-            <Link href="/pendientes" className="text-sm text-red-700 hover:underline">Ver los {pend.length} pendientes →</Link>
+            <Link href="/pendientes" className="text-sm text-oro-700 hover:underline">Ver los {pend.length} pendientes →</Link>
           </div>
           <div className="space-y-3">
             {pend.slice(0, 5).map((p) => (

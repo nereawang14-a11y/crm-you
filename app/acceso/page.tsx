@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PINES, setRol, type Rol } from "@/lib/rol";
+import { Logo } from "@/components/logo";
 
 const PERFILES: { rol: Rol; titulo: string; texto: string; destino: string }[] = [
   { rol: "direccion", titulo: "Dirección", texto: "CRM completo: clientes, pendientes, mesas, presupuestos, carta y formación.", destino: "/" },
@@ -19,12 +20,12 @@ export default function Acceso() {
     <div className="flex min-h-screen items-center justify-center bg-[#faf8f5] p-6">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
-          <div className="text-5xl font-black tracking-tight text-red-700">YOU</div>
+          <Logo size="lg" />
           <div className="text-sm text-stone-500">Restaurante asiático · Alcalá de Henares</div>
         </div>
         <div className="space-y-3">
           {PERFILES.map((p) => (
-            <button key={p.rol} onClick={() => { setSel(p.rol); setPin(""); setError(""); }} className={`w-full rounded-xl border bg-white p-4 text-left shadow-sm ${sel === p.rol ? "border-red-600 ring-1 ring-red-600" : "border-stone-200 hover:border-stone-300"}`}>
+            <button key={p.rol} onClick={() => { setSel(p.rol); setPin(""); setError(""); }} className={`w-full rounded-xl border bg-white p-4 text-left shadow-sm ${sel === p.rol ? "border-stone-900 ring-1 ring-stone-900" : "border-stone-200 hover:border-stone-300"}`}>
               <div className="font-semibold">{p.titulo}</div>
               <div className="text-sm text-stone-600">{p.texto}</div>
             </button>
@@ -40,8 +41,8 @@ export default function Acceso() {
               router.replace(PERFILES.find((p) => p.rol === sel)!.destino);
             }}
           >
-            <input autoFocus type="password" inputMode="numeric" placeholder="PIN" className="w-full rounded-md border border-stone-300 px-3 py-2 text-base focus:border-red-600 focus:outline-none" value={pin} onChange={(e) => setPin(e.target.value)} />
-            <button type="submit" className="rounded-md bg-red-700 px-4 py-2 font-medium text-white">Entrar</button>
+            <input autoFocus type="password" inputMode="numeric" placeholder="PIN" className="w-full rounded-md border border-stone-300 px-3 py-2 text-base focus:border-stone-500 focus:outline-none" value={pin} onChange={(e) => setPin(e.target.value)} />
+            <button type="submit" className="rounded-md bg-stone-900 px-4 py-2 font-medium text-white">Entrar</button>
           </form>
         )}
         {error && <p className="mt-2 text-sm text-red-700">{error}</p>}

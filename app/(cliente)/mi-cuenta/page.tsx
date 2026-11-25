@@ -40,7 +40,7 @@ export default function MiCuenta() {
         >
           <input className={`${inputCls} text-base`} inputMode="tel" placeholder="Tu teléfono" value={tel} onChange={(e) => setTel(e.target.value)} />
           {error && <p className="text-sm text-red-700">{error}</p>}
-          <button type="submit" className="w-full rounded-lg bg-red-700 py-3 font-medium text-white">Entrar</button>
+          <button type="submit" className="w-full rounded-lg bg-stone-900 py-3 font-medium text-white">Entrar</button>
           <p className="text-xs text-stone-500">Demo: acceso simulado sin contraseña. Prueba con 688 901 201 (Diego Romero).</p>
         </form>
       </Card>
@@ -113,7 +113,7 @@ function Visita({ it, c }: { it: Item; c: Cliente }) {
                   <button
                     disabled={!it.checkinId}
                     onClick={() => it.checkinId && marcarPlatos(it.checkinId, marcado ? it.marcados.filter((x) => x !== p.nombre) : [...it.marcados, p.nombre])}
-                    className={`rounded-full px-2.5 py-1 text-xs ${marcado ? "bg-red-700 text-white" : "bg-stone-100 text-stone-700"}`}
+                    className={`rounded-full px-2.5 py-1 text-xs ${marcado ? "bg-stone-900 text-white" : "bg-stone-100 text-stone-700"}`}
                   >
                     {p.cantidad > 1 ? `${p.cantidad}× ` : ""}{p.nombre}{marcado ? " ✓" : ""}
                   </button>
@@ -128,7 +128,7 @@ function Visita({ it, c }: { it: Item; c: Cliente }) {
           ) : diasEntre(it.fecha, hoy()) > 14 ? (
             <p className="mt-2 text-xs text-stone-400">Sin valorar</p>
           ) : !abierto ? (
-            <button onClick={() => setAbierto(true)} className="mt-3 w-full rounded-lg border border-red-700 py-2 text-sm font-medium text-red-700">¿Qué tal fue? Valorar</button>
+            <button onClick={() => setAbierto(true)} className="mt-3 w-full rounded-lg border border-stone-900 py-2 text-sm font-medium text-stone-900">¿Qué tal fue? Valorar</button>
           ) : (
             <div className="mt-3 space-y-2">
               <div className="flex justify-center gap-2">

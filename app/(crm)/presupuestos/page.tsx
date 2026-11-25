@@ -45,7 +45,7 @@ export default function Presupuestos() {
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="font-medium capitalize">{p.tipoEvento} · {p.personas} pers.</div>
-                          {c && <Link href={`/clientes/${c.id}`} className="text-sm text-red-700 hover:underline">{c.nombre}</Link>}
+                          {c && <Link href={`/clientes/${c.id}`} className="text-sm text-oro-700 hover:underline">{c.nombre}</Link>}
                         </div>
                         <div className="text-right font-semibold">{fmtEuros(p.importe)}</div>
                       </div>

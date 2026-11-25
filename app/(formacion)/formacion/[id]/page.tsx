@@ -12,7 +12,7 @@ export default function FichaFormacion() {
   const f = FICHAS.find((x) => x.id === id);
   const [hechas, setHechas] = useState<string[]>([]);
   useEffect(() => setHechas(getProgreso()), []);
-  if (!f) return <Card>Ficha no encontrada. <Link href="/formacion" className="text-red-700">Volver</Link></Card>;
+  if (!f) return <Card>Ficha no encontrada. <Link href="/formacion" className="text-oro-700">Volver</Link></Card>;
   const aprendida = hechas.includes(f.id);
   const toggle = () => {
     const n = aprendida ? hechas.filter((h) => h !== f.id) : [...hechas, f.id];
@@ -24,7 +24,7 @@ export default function FichaFormacion() {
 
   return (
     <div className="max-w-3xl">
-      <Link href="/formacion" className="text-sm text-stone-500 hover:text-red-700">← Todas las fichas</Link>
+      <Link href="/formacion" className="text-sm text-stone-500 hover:text-oro-700">← Todas las fichas</Link>
       <div className="mt-2 text-xs uppercase tracking-wide text-stone-400">{f.tipo === "cocina" ? "Cocina" : "Sala"} · {f.categoria}{f.codigoCarta ? ` · nº de carta ${f.codigoCarta}` : ""}</div>
       <h1 className="text-2xl font-semibold">{f.titulo}</h1>
       <div className="mt-2 flex flex-wrap gap-2">
@@ -70,10 +70,10 @@ export default function FichaFormacion() {
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <button onClick={toggle} className={`rounded-md px-4 py-2 text-sm font-medium ${aprendida ? "border border-emerald-600 text-emerald-700" : "bg-red-700 text-white hover:bg-red-800"}`}>
+        <button onClick={toggle} className={`rounded-md px-4 py-2 text-sm font-medium ${aprendida ? "border border-emerald-600 text-emerald-700" : "bg-stone-900 text-white hover:bg-stone-700"}`}>
           {aprendida ? "Aprendida ✓ (desmarcar)" : "Marcar como aprendida"}
         </button>
-        {sig && <Link href={`/formacion/${sig.id}`} className="text-sm text-red-700 hover:underline">Siguiente: {sig.titulo} →</Link>}
+        {sig && <Link href={`/formacion/${sig.id}`} className="text-sm text-oro-700 hover:underline">Siguiente: {sig.titulo} →</Link>}
       </div>
     </div>
   );

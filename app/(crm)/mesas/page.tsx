@@ -11,6 +11,7 @@ import type { Plato, SesionMesa } from "@/lib/types";
 import { Badge, Boton, Card, Titulo, inputCls } from "@/components/ui";
 import { MESAS, nombreMesa } from "@/lib/mesas";
 import { destinatariosDigitales } from "@/lib/tickets";
+import { Logo } from "@/components/logo";
 
 
 
@@ -33,12 +34,12 @@ export default function Mesas() {
       {qr !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setQr(null)}>
           <div className="rounded-2xl bg-white p-8 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="text-3xl font-black text-red-700">YOU</div>
+            <Logo size="md" />
             <div className="mb-4 text-stone-600">{nombreMesa(qr)} · Escanea y únete a tu mesa</div>
             <QRCodeSVG value={`${origen}/mesa/${qr}`} size={220} />
             <div className="mt-3 text-xs text-stone-500">{origen}/mesa/{qr}</div>
             <div className="mt-4 flex justify-center gap-2">
-              <a href={`/mesa/${qr}`} target="_blank" className="rounded-md bg-red-700 px-3 py-2 text-sm font-medium text-white">Abrir en otra pestaña ↗</a>
+              <a href={`/mesa/${qr}`} target="_blank" className="rounded-md bg-stone-900 px-3 py-2 text-sm font-medium text-white">Abrir en otra pestaña ↗</a>
               <Boton variante="secundario" onClick={() => setQr(null)}>Cerrar</Boton>
             </div>
           </div>
@@ -75,11 +76,11 @@ function Mesa({ n, sesion, onQr }: { n: number; sesion?: SesionMesa; onQr: () =>
             return (
               <li key={k.id} className="flex items-center justify-between text-sm">
                 <span>
-                  <Link href={`/clientes/${c.id}`} className="font-medium hover:text-red-700">{c.nombre}</Link>
+                  <Link href={`/clientes/${c.id}`} className="font-medium hover:text-oro-700">{c.nombre}</Link>
                   <span className="text-xs text-stone-500"> · {k.hechoPor === "cliente" ? "QR" : "personal"}</span>
                   {c.alergias.length > 0 && <Badge className="ml-2 bg-red-100 text-red-700">{c.alergias.join(", ")}</Badge>}
                 </span>
-                <button onClick={() => quitarCheckIn(k.id)} className="text-xs text-stone-400 hover:text-red-700">quitar</button>
+                <button onClick={() => quitarCheckIn(k.id)} className="text-xs text-stone-400 hover:text-oro-700">quitar</button>
               </li>
             );
           })}

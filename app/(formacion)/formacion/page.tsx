@@ -24,7 +24,7 @@ export default function Formacion() {
           <span className="text-stone-600">{hechas.length} de {FICHAS.length} fichas · {pct} %</span>
         </div>
         <div className="mt-2 h-2 rounded-full bg-stone-100">
-          <div className="h-2 rounded-full bg-red-700 transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-2 rounded-full bg-stone-900 transition-all" style={{ width: `${pct}%` }} />
         </div>
       </Card>
 
@@ -37,7 +37,7 @@ export default function Formacion() {
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         {lista.map((f) => (
           <Link key={f.id} href={`/formacion/${f.id}`}>
-            <Card className="h-full transition hover:border-red-300">
+            <Card className="h-full transition hover:border-oro">
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div className="text-xs uppercase tracking-wide text-stone-400">{f.tipo === "cocina" ? "Cocina" : "Sala"} · {f.categoria}{f.codigoCarta ? ` · nº ${f.codigoCarta}` : ""}</div>
