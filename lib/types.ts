@@ -92,7 +92,8 @@ export type MotivoMensaje =
   | "cumpleaños"
   | "resena"
   | "presupuesto"
-  | "captacion";
+  | "captacion"
+  | "recordatorio-anual";
 
 export type Mensaje = {
   id: string;

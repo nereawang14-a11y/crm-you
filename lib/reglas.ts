@@ -1,5 +1,6 @@
 import type { Cliente, Datos, MotivoMensaje } from "./types";
-import { aDia, cumpleDesde, desdeIso, diasEntre, hoy } from "./fechas";
+import { aDia, cumpleDesde, desdeIso, diasEntre, fmtFecha, hoy } from "./fechas";
+import { ANTELACION } from "./documentos";
 
 // ---------- Visitas y segmentos ----------
 
@@ -98,6 +99,7 @@ export type TipoPendiente =
   | "alergia-hoy"
   | "presupuesto-sin-respuesta"
   | "celebracion-proxima"
+  | "recordatorio-anual"
   | "habitual-sin-cuenta"
   | "reactivacion"
   | "cumpleanos"
@@ -109,6 +111,7 @@ export const INFO_PENDIENTE: Record<TipoPendiente, { prioridad: number; nombre: 
   "alergia-hoy": { prioridad: 2, nombre: "Alergia en mesa hoy", comercial: false },
   "presupuesto-sin-respuesta": { prioridad: 3, nombre: "Presupuesto sin respuesta", comercial: false },
   "celebracion-proxima": { prioridad: 4, nombre: "Celebración próxima", comercial: false },
+  "recordatorio-anual": { prioridad: 4, nombre: "Recordatorio de celebración anual", comercial: false },
   "habitual-sin-cuenta": { prioridad: 5, nombre: "Habitual sin cuenta", comercial: false },
   reactivacion: { prioridad: 6, nombre: "Te echamos de menos", comercial: true },
   cumpleanos: { prioridad: 7, nombre: "Cumpleaños", comercial: true },
@@ -198,6 +201,28 @@ export function calcularPendientes(d: Datos, ref: Date = hoy()): Pendiente[] {
         accion: "Confirmar personas y menú", canal: "llamada",
       });
     }
+  }
+
+  // 4b. Recordatorio anual: celebraron con nosotros hace ~1 año → enviar documento con antelación
+  for (const p of d.presupuestos) {
+    const haceDias = diasEntre(p.fechaEvento, H);
+    if (p.estado !== "ganado" || haceDias < 300 || haceDias > 420) continue;
+    const regla = ANTELACION[p.tipoEvento];
+    const falta = cumpleDesde(H, p.fechaEvento.slice(5, 10));
+    const c = cli.get(p.clienteId);
+    if (!c || falta > regla.dias) continue;
+    const yaTieneOtro = d.presupuestos.some((q) => q.clienteId === c.id && q.id !== p.id && diasEntre(q.fechaEnvio, H) <= 90);
+    const yaAvisado = d.mensajes.some((m) => m.clienteId === c.id && m.motivo === "recordatorio-anual" && diasEntre(m.fecha, H) <= 300);
+    if (yaTieneOtro || yaAvisado) continue;
+    const n = primerNombre(c);
+    const enlace = `crm-you.vercel.app/doc/${regla.documento}`;
+    out.push({
+      clave: `ra:${p.id}:${H.getFullYear()}`, tipo: "recordatorio-anual", prioridad: 4, clienteId: c.id,
+      detalle: `El año pasado: ${p.tipoEvento}${c.empresa ? ` de ${c.empresa}` : ""}, ${p.personas} personas, el ${fmtFecha(p.fechaEvento)}. Aniversario dentro de ${falta} días (avisamos ${regla.dias} días antes).`,
+      accion: wa(c) ? "Enviar la propuesta por WhatsApp" : "Llamar y ofrecer la propuesta",
+      canal: wa(c) ? "whatsapp" : "llamada",
+      mensaje: wa(c) ? { motivo: "recordatorio-anual", texto: p.tipoEvento === "cena de empresa" ? `Hola ${n}, el año pasado celebrasteis en YOU la cena de empresa de Navidad y nos encantaría repetir. Te dejamos la propuesta de este año: ${enlace}. Diciembre se llena pronto: si nos dices la fecha, os la guardamos.` : `Hola ${n}, hace casi un año celebrasteis en YOU un ${p.tipoEvento}. Si este año os apetece repetir, aquí tenéis nuestros menús para grupos: ${enlace}` } : undefined,
+    });
   }
 
   for (const c of d.clientes) {

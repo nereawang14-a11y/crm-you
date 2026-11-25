@@ -185,7 +185,7 @@ export const FICHAS: Ficha[] = [
     categoria: "Sala",
     tiempo: "Preparar el día antes",
     nivel: "Medio",
-    resumen: "No hay reservado fijo: las mesas se juntan según el grupo (23 mesas, ampliables hasta 40 combinando).",
+    resumen: "No hay reservado fijo: las mesas se juntan según el grupo (23 mesas en sala más 4 en terraza, que se dividen o se juntan según el grupo).",
     pasos: ["Revisar en el Panel los «Grupos grandes próximos».", "Planificar qué mesas se juntan (si el cliente tiene mesa preferida, alrededor de ella).", "En cumpleaños, preguntar si traen tarta o quieren velas.", "Sugerir el pato laqueado o los menús para compartir a grupos que celebran algo."],
     calidad: ["Sacar los platos a la vez para todo el grupo.", "Una sola persona de sala de referencia para el grupo."],
   },

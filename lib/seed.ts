@@ -2,7 +2,7 @@ import type { Cliente, Datos, Plato, SesionMesa, CheckIn, PedidoLlevar, Feedback
 import { aDia, diasHastaUltimo, hoy, rel } from "./fechas";
 import { CARTA, precioDe } from "./carta";
 
-export const VERSION_DATOS = 5;
+export const VERSION_DATOS = 6;
 
 export { CARTA };
 
@@ -73,6 +73,7 @@ export function generarDatos(): Datos {
     cliente({ id: "c-elena", nombre: "Elena Navarro", telefono: "666 789 001", comoNosConocio: "google" }, rel(H, -60, "20:00")),
     cliente({ id: "c-marta", nombre: "Marta Gil", telefono: "677 890 101", empresa: "Gestoría Gil", comoNosConocio: "boca a boca" }, rel(H, -80, "13:00")),
     cliente({ id: "c-diego", nombre: "Diego Romero", telefono: "688 901 201", platosFavoritos: ["Yakisoba (tallarines)", "Xiao long bao (4 piezas)"], mesaPreferida: 4, comensalesHabitual: 1, comoNosConocio: "google" }, alta),
+    cliente({ id: "c-laura", nombre: "Laura Domínguez", telefono: "622 777 401", empresa: "Consultora Henares", comoNosConocio: "google", notas: "Organiza la cena de Navidad de su empresa. El año pasado vinieron 18 personas." }, rel(H, -400, "12:00")),
     cliente({ id: "c-irene", nombre: "Irene Castro", telefono: "699 012 301", cumpleanos: mmdd(4), comoNosConocio: "google" }, rel(H, -5, "21:00")),
   ];
 
@@ -157,6 +158,7 @@ export function generarDatos(): Datos {
   sesion(20, "21:15", 5, 2, ["c-elena"], [plato("Yakisoba con pollo y verduras"), plato("Gambas Gon-Bao"), plato("Rollo de primavera", 2), plato("Copa de vino", 2)]);
   sesion(70, "14:00", 7, 6, ["c-marta"], [plato("Menú del día B", 6)]);
   sesion(30, "14:00", 7, 5, ["c-marta"], [plato("Menú del día B", 5)]);
+  sesion(341, "21:00", 10, 18, ["c-laura"], [plato("Menú Japonés (2 personas)", 9), plato("Copa de vino", 18), plato("Mochi (2 piezas)", 9)]);
   sesion(5, "21:00", 1, 2, ["c-irene"], [plato("Saomai (4 piezas)"), plato("Yakisoba con pollo y verduras"), plato("Pollo Gon-Bao"), plato("Helado de té verde")]);
 
   // --- Mesas de clientes sin identificar (sin check-in): volumen realista.
@@ -238,6 +240,9 @@ export function generarDatos(): Datos {
       { id: "b-1", clienteId: "c-elena", tipoEvento: "cumpleaños", fechaEvento: rel(H, 18, "21:00"), personas: 20, menu: "Menú Cantonés para compartir", importe: 380, fechaEnvio: rel(H, -7, "18:00"), estado: "enviado", motivoPerdida: null },
       { id: "b-2", clienteId: "c-marta", tipoEvento: "cena de empresa", fechaEvento: rel(H, 2, "21:00"), personas: 14, menu: "Menú Asia para compartir", importe: 280, fechaEnvio: rel(H, -20, "12:00"), estado: "ganado", motivoPerdida: null },
       { id: "b-3", clienteId: "c-javier", tipoEvento: "cena de empresa", fechaEvento: rel(H, 25, "21:00"), personas: 10, menu: "Menú You para compartir", importe: 175, fechaEnvio: rel(H, -2, "16:00"), estado: "enviado", motivoPerdida: null },
+      // Hace casi un año: base de los recordatorios anuales
+      { id: "b-5", clienteId: "c-laura", tipoEvento: "cena de empresa", fechaEvento: rel(H, 24 - 365, "21:00"), personas: 18, menu: "Menú Japonés para compartir", importe: 413, fechaEnvio: rel(H, -400, "12:00"), estado: "ganado", motivoPerdida: null },
+      { id: "b-6", clienteId: "c-marta", tipoEvento: "cena de empresa", fechaEvento: rel(H, 2 - 365, "21:00"), personas: 12, menu: "Menú Asia para compartir", importe: 240, fechaEnvio: rel(H, -390, "12:00"), estado: "ganado", motivoPerdida: null },
       { id: "b-4", clienteId: "c-diego", tipoEvento: "cumpleaños", fechaEvento: rel(H, -30, "21:00"), personas: 12, menu: "Menú Japonés para compartir", importe: 275, fechaEnvio: rel(H, -45, "12:00"), estado: "perdido", motivoPerdida: "Lo celebró en otra ciudad" },
     ],
     feedback,

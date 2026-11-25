@@ -15,6 +15,7 @@ const MENU = [
   { href: "/mesas", label: "Mesas" },
   { href: "/presupuestos", label: "Presupuestos" },
   { href: "/carta", label: "Carta" },
+  { href: "/documentos", label: "Documentos y campañas" },
   { href: "/formacion", label: "Formación" },
 ];
 
