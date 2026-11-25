@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { calcularPendientes, statsCliente, UMBRAL_RIESGO } from "@/lib/reglas";
-import { CARTA, plato } from "@/lib/seed";
+import { plato } from "@/lib/seed";
+import { OpcionesCarta } from "@/components/carta";
 import { fmtEuros, fmtFecha, fmtFechaHora, haceTexto } from "@/lib/fechas";
 import type { Cliente, Plato } from "@/lib/types";
 import { Badge, Boton, Card, Estrellas, PendienteItem, SegmentoBadge, inputCls } from "@/components/ui";
@@ -54,7 +55,7 @@ export default function Ficha() {
           <h1 className="text-2xl font-semibold">{c.nombre}</h1>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-stone-500">
             <span>{c.telefono}</span>
-            <SegmentoBadge s={s.segmento} riesgo={s.enRiesgo} />
+            <SegmentoBadge s={s.segmento} riesgo={s.enRiesgo} menos={s.vieneMenos} />
             {c.tieneCuenta ? <Badge className="bg-emerald-100 text-emerald-800">Cuenta {c.cuentaCreadaPor === "personal" ? "creada por el personal" : "creada por el cliente"}</Badge> : <Badge className="bg-amber-100 text-amber-800">Sin cuenta</Badge>}
             {c.empresa && <span>· {c.empresa}</span>}
           </div>
@@ -83,7 +84,7 @@ export default function Ficha() {
             </dl>
           </Card>
           {editando ? <EditarCliente c={c} /> : <Preferencias c={c} />}
-          <NuevoPedido clienteId={c.id} />
+          <NuevoPedido cliente={c} />
         </div>
 
         <div className="space-y-4 lg:col-span-2">
@@ -128,6 +129,7 @@ function Preferencias({ c }: { c: Cliente }) {
         {fila("Canal preferido", c.canalPreferido)}
         {fila("Cómo nos conoció", c.comoNosConocio)}
         {fila("WhatsApp comercial", c.consentimientoWhatsapp.acepta ? "Sí, aceptado" : "No")}
+        {fila("Pedido de siempre", c.pedidoHabitual?.map((p) => `${p.cantidad}× ${p.nombre}`).join(", "))}
         {fila("Notas", c.notas)}
       </dl>
     </Card>
@@ -204,18 +206,26 @@ function FeedbackSinResponder({ clienteId }: { clienteId: string }) {
   );
 }
 
-function NuevoPedido({ clienteId }: { clienteId: string }) {
+function NuevoPedido({ cliente }: { cliente: Cliente }) {
+  const clienteId = cliente.id;
   const { crearPedido } = useStore();
   const [abierto, setAbierto] = useState(false);
   const [lineas, setLineas] = useState<Plato[]>([]);
-  const [sel, setSel] = useState(CARTA[1].nombre);
+  const [sel, setSel] = useState("Rollo de primavera");
   const [canal, setCanal] = useState<"telefono" | "web" | "whatsapp">("telefono");
   const [ok, setOk] = useState<string | null>(null);
   const total = lineas.reduce((s, p) => s + p.cantidad * p.precio, 0);
   if (!abierto)
     return (
       <div>
-        <Boton variante="secundario" onClick={() => { setAbierto(true); setOk(null); }}>+ Registrar pedido para llevar</Boton>
+        <div className="flex flex-wrap gap-2">
+          <Boton variante="secundario" onClick={() => { setAbierto(true); setOk(null); }}>+ Registrar pedido para llevar</Boton>
+          {cliente.pedidoHabitual && (
+            <Boton onClick={() => { setLineas(cliente.pedidoHabitual!.map((p) => ({ ...p }))); setAbierto(true); setOk(null); }}>
+              Repetir pedido de siempre ({fmtEuros(cliente.pedidoHabitual.reduce((a, p) => a + p.cantidad * p.precio, 0))})
+            </Boton>
+          )}
+        </div>
         {ok && <p className={`mt-2 rounded-md px-3 py-2 text-sm font-medium ${ok.includes("botella") ? "bg-rose-50 text-rose-800" : "text-emerald-700"}`}>{ok}</p>}
       </div>
     );
@@ -223,7 +233,7 @@ function NuevoPedido({ clienteId }: { clienteId: string }) {
     <Card>
       <h2 className="mb-3 font-semibold">Pedido para llevar</h2>
       <div className="flex gap-2">
-        <select className={inputCls} value={sel} onChange={(e) => setSel(e.target.value)}>{CARTA.map((p) => <option key={p.nombre} value={p.nombre}>{p.nombre} · {fmtEuros(p.precio)}</option>)}</select>
+        <select className={inputCls} value={sel} onChange={(e) => setSel(e.target.value)}><OpcionesCarta paraLlevar /></select>
         <Boton variante="secundario" onClick={() => {
           const i = lineas.findIndex((l) => l.nombre === sel);
           setLineas(i >= 0 ? lineas.map((l, j) => (j === i ? { ...l, cantidad: l.cantidad + 1 } : l)) : [...lineas, plato(sel)]);

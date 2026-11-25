@@ -12,6 +12,7 @@ const MENU = [
   { href: "/clientes", label: "Clientes" },
   { href: "/mesas", label: "Mesas" },
   { href: "/presupuestos", label: "Presupuestos" },
+  { href: "/carta", label: "Carta" },
 ];
 
 export default function CrmLayout({ children }: { children: React.ReactNode }) {

@@ -38,6 +38,7 @@ export type Stats = {
   intervaloMedio: number | null;
   segmento: Segmento;
   enRiesgo: boolean;
+  vieneMenos: boolean; // habitual que tarda más de lo normal en volver, sin llegar al umbral de riesgo
   gastoEstimado: number;
   valoracionMedia: number | null;
 };
@@ -61,6 +62,7 @@ export function statsCliente(d: Datos, c: Cliente, ref: Date = hoy()): Stats {
 
   const umbral = UMBRAL_RIESGO[segmento];
   const enRiesgo = umbral !== null && diasSinVenir !== null && diasSinVenir > umbral;
+  const vieneMenos = esHabitual(segmento) && !enRiesgo && intervalo !== null && diasSinVenir !== null && diasSinVenir >= 1.5 * intervalo;
 
   // Gasto estimado: importe de la sesión ÷ comensales + pedidos propios
   const sesPorId = new Map(d.sesiones.map((s) => [s.id, s]));
@@ -83,6 +85,7 @@ export function statsCliente(d: Datos, c: Cliente, ref: Date = hoy()): Stats {
     intervaloMedio: intervalo,
     segmento,
     enRiesgo,
+    vieneMenos,
     gastoEstimado: Math.round(gasto * 100) / 100,
     valoracionMedia,
   };

@@ -19,6 +19,7 @@ export type Cliente = {
   comoNosConocio: "google" | "boca a boca" | "paso por la calle" | "redes" | "otro" | null;
   empresa: string | null;
   notas: string;
+  pedidoHabitual?: Plato[]; // "pedido de siempre" para llevar
 };
 
 export type SesionMesa = {

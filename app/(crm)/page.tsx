@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { calcularKpis, calcularPendientes } from "@/lib/reglas";
-import { aDia, fmtEuros, hoy } from "@/lib/fechas";
+import { aDia, fmtEuros, fmtFechaHora, hoy } from "@/lib/fechas";
 import { Badge, Card, PendienteItem, Titulo } from "@/components/ui";
 
 function Kpi({ titulo, valor, comparacion, ayuda, alerta }: { titulo: string; valor: string; comparacion?: React.ReactNode; ayuda: string; alerta?: boolean }) {
@@ -35,6 +35,9 @@ export default function Panel() {
   const pend = calcularPendientes(datos).filter((p) => !p.ocultoPorCortesia);
   const cli = new Map(datos.clientes.map((c) => [c.id, c]));
   const hoyDia = aDia(hoy());
+  const gruposProximos = datos.reservas
+    .filter((r) => r.comensales >= 8 && r.estado !== "cancelada" && r.fechaHora.slice(0, 10) > hoyDia)
+    .sort((a, b) => a.fechaHora.localeCompare(b.fechaHora));
   const reservasHoy = datos.reservas
     .filter((r) => r.fechaHora.slice(0, 10) === hoyDia && r.estado !== "cancelada")
     .sort((a, b) => a.fechaHora.localeCompare(b.fechaHora));
@@ -98,12 +101,29 @@ export default function Panel() {
                   <div className="flex flex-col items-end gap-1">
                     {c.alergias.length > 0 && <Badge className="bg-red-100 text-red-700">Alergia: {c.alergias.join(", ")}</Badge>}
                     {!c.tieneCuenta && <Badge className="bg-amber-100 text-amber-800">Sin cuenta</Badge>}
+                    {r.comensales >= 8 && <Badge className="bg-violet-100 text-violet-800">Grupo grande: juntar mesas</Badge>}
                   </div>
                 </div>
               );
             })}
             {reservasHoy.length === 0 && <div className="px-4 py-3 text-sm text-stone-500">No hay reservas para hoy.</div>}
           </Card>
+          {gruposProximos.length > 0 && (
+            <>
+              <h2 className="mb-3 mt-6 text-lg font-semibold">Grupos grandes próximos</h2>
+              <Card className="divide-y divide-stone-100 p-0">
+                {gruposProximos.map((r) => {
+                  const c = cli.get(r.clienteId)!;
+                  return (
+                    <div key={r.id} className="px-4 py-3">
+                      <Link href={`/clientes/${c.id}`} className="font-medium hover:underline">{c.nombre}</Link>
+                      <div className="text-xs text-stone-500">{fmtFechaHora(r.fechaHora)} · {r.comensales} personas · juntar mesas{c.mesaPreferida ? ` junto a la ${c.mesaPreferida}` : ""}</div>
+                    </div>
+                  );
+                })}
+              </Card>
+            </>
+          )}
         </div>
       </div>
     </div>

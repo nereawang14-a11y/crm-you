@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { useStore } from "@/lib/store";
-import { CARTA, plato } from "@/lib/seed";
+import { plato } from "@/lib/seed";
+import { OpcionesCarta } from "@/components/carta";
 import { fmtEuros } from "@/lib/fechas";
 import type { Plato, SesionMesa } from "@/lib/types";
 import { Badge, Boton, Card, Titulo, inputCls } from "@/components/ui";
@@ -111,13 +112,13 @@ function Mesa({ n, sesion, onQr }: { n: number; sesion?: SesionMesa; onQr: () =>
 
 function CerrarMesa({ sesion, minComensales, onFin, cerrar }: { sesion: SesionMesa; minComensales: number; onFin: () => void; cerrar: (id: string, p: Plato[], c: number) => void }) {
   const [lineas, setLineas] = useState<Plato[]>([]);
-  const [sel, setSel] = useState(CARTA[0].nombre);
+  const [sel, setSel] = useState("Menú del día A");
   const [com, setCom] = useState(Math.max(1, minComensales));
   const total = lineas.reduce((s, p) => s + p.cantidad * p.precio, 0);
   return (
     <div className="mt-3 rounded-lg bg-stone-50 p-3">
       <div className="flex gap-2">
-        <select className={inputCls} value={sel} onChange={(e) => setSel(e.target.value)}>{CARTA.map((p) => <option key={p.nombre} value={p.nombre}>{p.nombre} · {fmtEuros(p.precio)}</option>)}</select>
+        <select className={inputCls} value={sel} onChange={(e) => setSel(e.target.value)}><OpcionesCarta /></select>
         <Boton variante="secundario" onClick={() => {
           const i = lineas.findIndex((l) => l.nombre === sel);
           setLineas(i >= 0 ? lineas.map((l, j) => (j === i ? { ...l, cantidad: l.cantidad + 1 } : l)) : [...lineas, plato(sel)]);

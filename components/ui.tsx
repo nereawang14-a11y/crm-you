@@ -31,11 +31,12 @@ export function Badge({ children, className = "" }: { children: React.ReactNode;
   return <span className={`inline-flex items-center whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium ${className}`}>{children}</span>;
 }
 
-export function SegmentoBadge({ s, riesgo }: { s: Segmento; riesgo?: boolean }) {
+export function SegmentoBadge({ s, riesgo, menos }: { s: Segmento; riesgo?: boolean; menos?: boolean }) {
   return (
     <span className="inline-flex gap-1">
       <Badge className={COLOR_SEG[s]}>{s}</Badge>
       {riesgo && <Badge className="bg-red-100 text-red-700">En riesgo</Badge>}
+      {menos && <Badge className="bg-orange-100 text-orange-800">Viene menos</Badge>}
     </span>
   );
 }

@@ -12,7 +12,7 @@ export default function Clientes() {
   const { datos, crearCliente, buscarPorTelefono } = useStore();
   const router = useRouter();
   const [q, setQ] = useState("");
-  const [seg, setSeg] = useState<Segmento | "todos" | "riesgo" | "sin-cuenta" | "habituales">("todos");
+  const [seg, setSeg] = useState<Segmento | "todos" | "riesgo" | "menos" | "sin-cuenta" | "habituales">("todos");
   const [nuevo, setNuevo] = useState(false);
   const [form, setForm] = useState({ nombre: "", telefono: "" });
   const [error, setError] = useState("");
@@ -26,6 +26,7 @@ export default function Clientes() {
     .filter(({ c, s }) => {
       if (seg === "todos") return true;
       if (seg === "riesgo") return s.enRiesgo;
+      if (seg === "menos") return s.vieneMenos;
       if (seg === "sin-cuenta") return !c.tieneCuenta;
       if (seg === "habituales") return esHabitual(s.segmento);
       return s.segmento === seg;
@@ -33,7 +34,7 @@ export default function Clientes() {
     .sort((a, b) => (b.s.ultimaVisita ?? "").localeCompare(a.s.ultimaVisita ?? ""));
 
   const filtros: [typeof seg, string][] = [
-    ["todos", "Todos"], ["habituales", "Habituales"], ["riesgo", "En riesgo"], ["sin-cuenta", "Sin cuenta"],
+    ["todos", "Todos"], ["habituales", "Habituales"], ["riesgo", "En riesgo"], ["menos", "Viene menos"], ["sin-cuenta", "Sin cuenta"],
     ["Diario", "Diario"], ["Semanal", "Semanal"], ["Quincenal", "Quincenal"], ["Ocasional", "Ocasional"], ["Nuevo", "Nuevo"],
   ];
 
@@ -91,7 +92,7 @@ export default function Clientes() {
                   <Link href={`/clientes/${c.id}`} className="font-medium text-stone-900 hover:text-red-700">{c.nombre}</Link>
                   <div className="text-xs text-stone-500">{c.telefono}{c.empresa ? ` · ${c.empresa}` : ""}</div>
                 </td>
-                <td className="px-4 py-3"><SegmentoBadge s={s.segmento} riesgo={s.enRiesgo} /></td>
+                <td className="px-4 py-3"><SegmentoBadge s={s.segmento} riesgo={s.enRiesgo} menos={s.vieneMenos} /></td>
                 <td className="px-4 py-3">{s.ultimaVisita ? <>{fmtFecha(s.ultimaVisita)} <span className="text-xs text-stone-500">({haceTexto(s.diasSinVenir!)})</span></> : "—"}</td>
                 <td className="px-4 py-3 text-right">{s.visitas90}</td>
                 <td className="px-4 py-3">{s.valoracionMedia ? <Estrellas n={s.valoracionMedia} /> : <span className="text-stone-400">—</span>}</td>
